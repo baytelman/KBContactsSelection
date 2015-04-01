@@ -24,6 +24,7 @@
 		8E89D6101A3CB5F6001CE6D7 /* APContact+FullName.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E89D60F1A3CB5F6001CE6D7 /* APContact+FullName.m */; };
 		8EA2FD7B1A407C4B00332755 /* KBContactsSelectionConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EA2FD7A1A407C4B00332755 /* KBContactsSelectionConfiguration.m */; };
 		8EA2FD7D1A408A8000332755 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EA2FD7C1A408A8000332755 /* MessageUI.framework */; };
+		B26D80C61ACB99F300D8A72A /* KBAlternativeContactCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B26D80C51ACB99F300D8A72A /* KBAlternativeContactCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,7 @@
 		8EA2FD7C1A408A8000332755 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		A9CB46BDAB0549C2A36BE3C5 /* Pods-KBContactsSelectionExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KBContactsSelectionExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KBContactsSelectionExample/Pods-KBContactsSelectionExample.debug.xcconfig"; sourceTree = "<group>"; };
 		AA483AA219930DF2E6570916 /* Pods-KBContactsSelectionExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KBContactsSelectionExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-KBContactsSelectionExample/Pods-KBContactsSelectionExample.release.xcconfig"; sourceTree = "<group>"; };
+		B26D80C51ACB99F300D8A72A /* KBAlternativeContactCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KBAlternativeContactCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,6 +134,7 @@
 		8E89D5D31A3CA8B6001CE6D7 /* KBContactsSelectionExample */ = {
 			isa = PBXGroup;
 			children = (
+				B26D80C51ACB99F300D8A72A /* KBAlternativeContactCell.xib */,
 				8E89D5D81A3CA8B6001CE6D7 /* AppDelegate.h */,
 				8E89D5D91A3CA8B6001CE6D7 /* AppDelegate.m */,
 				8E89D5DB1A3CA8B6001CE6D7 /* ViewController.h */,
@@ -274,6 +277,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8E89D5E01A3CA8B6001CE6D7 /* Main.storyboard in Resources */,
+				B26D80C61ACB99F300D8A72A /* KBAlternativeContactCell.xib in Resources */,
 				8E89D5E51A3CA8B6001CE6D7 /* LaunchScreen.xib in Resources */,
 				8E89D5E21A3CA8B6001CE6D7 /* Images.xcassets in Resources */,
 				8E89D6041A3CAA75001CE6D7 /* KBContactCell.xib in Resources */,

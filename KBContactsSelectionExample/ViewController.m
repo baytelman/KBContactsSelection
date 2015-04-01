@@ -53,6 +53,7 @@
         configuration.tintColor = [UIColor orangeColor];
         configuration.mode = KBContactsSelectionModeEmail;
         configuration.title = @"Present";
+        configuration.customContactCellNib = @"KBAlternativeContactCell";
         configuration.selectButtonTitle = @"Invite";
         configuration.customSelectButtonHandler = ^(NSArray * contacts) {
             NSLog(@"%@", contacts);

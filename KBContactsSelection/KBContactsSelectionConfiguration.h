@@ -19,16 +19,20 @@ typedef NS_ENUM(NSInteger, KBContactsSelectionMode) {
 
 @interface KBContactsSelectionConfiguration : NSObject
 
+/* Look & Feel */
 @property (nonatomic, strong) UIColor *tintColor;
 @property (nonatomic, assign) BOOL shouldShowNavigationBar;
 @property (nonatomic, strong) NSString * title;
+@property (nonatomic, strong) NSString * customContactCellNib;
 
+/* Contacts behavior */
 @property (nonatomic, assign) enum KBContactsSelectionMode mode;
 @property (nonatomic, assign) BOOL skipUnnamedContacts;
+@property (strong) KBContactValidation contactEnabledValidation;
 
+/* Action */
 @property (strong) NSString * selectButtonTitle;
 @property (strong) KBContactSelectionHandler customSelectButtonHandler;
-@property (strong) KBContactValidation contactEnabledValidation;
 
 + (KBContactsSelectionConfiguration*)defaultConfiguration;
 
