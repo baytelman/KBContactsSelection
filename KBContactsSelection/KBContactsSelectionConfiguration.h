@@ -9,8 +9,10 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+@class APContact;
+
 typedef void(^KBContactSelectionHandler)(NSArray * selectedContacts);
-typedef BOOL(^KBContactValidation)(id contact);
+typedef BOOL(^KBContactValidation)(APContact * contact);
 
 typedef NS_ENUM(NSInteger, KBContactsSelectionMode) {
     KBContactsSelectionModeMessages     = 1 << 0,
