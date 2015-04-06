@@ -4,7 +4,16 @@ PODS:
   - APAddressBook/Core (0.1.5)
 
 DEPENDENCIES:
-  - APAddressBook
+  - APAddressBook (from `https://github.com/baytelman/APAddressBook.git`)
+
+EXTERNAL SOURCES:
+  APAddressBook:
+    :git: https://github.com/baytelman/APAddressBook.git
+
+CHECKOUT OPTIONS:
+  APAddressBook:
+    :commit: 8c98487d9a71f2b95a22155ff3392c5cef5422b2
+    :git: https://github.com/baytelman/APAddressBook.git
 
 SPEC CHECKSUMS:
   APAddressBook: c72fec93464d57f39966ce28c107c10253fa7d39
