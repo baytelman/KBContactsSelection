@@ -245,6 +245,7 @@
 				TargetAttributes = {
 					8E89D5D01A3CA8B6001CE6D7 = {
 						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = H6KZKSR8T3;
 					};
 					8E89D5E91A3CA8B6001CE6D7 = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -465,6 +466,7 @@
 			baseConfigurationReference = A9CB46BDAB0549C2A36BE3C5 /* Pods-KBContactsSelectionExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = KBContactsSelectionExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -476,6 +478,7 @@
 			baseConfigurationReference = AA483AA219930DF2E6570916 /* Pods-KBContactsSelectionExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = KBContactsSelectionExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -10,9 +10,11 @@
 #import "KBContactsSelectionViewController.h"
 #import <APAddressBook/APContact.h>
 #import <APAddressBook/APPhoneWithLabel.h>
+#import <SVProgressHUD.h>
 
 @interface ViewController () <KBContactsSelectionViewControllerDelegate>
 @property (weak) KBContactsSelectionViewController* presentedCSVC;
+@property (strong) NSArray * fakeCache;
 @end
 
 @implementation ViewController
@@ -23,13 +25,11 @@
         configuration.shouldShowNavigationBar = NO;
         configuration.tintColor = [UIColor colorWithRed:11.0/255 green:211.0/255 blue:24.0/255 alpha:1];
         configuration.title = @"Push";
-        configuration.selectButtonTitle = @"+";
+        configuration.selectButtonTitle = @"Message";
         
-        configuration.mode = KBContactsSelectionModeMessages | KBContactsSelectionModeEmail;
+        configuration.mode = KBContactsSelectionModeMessages;
         configuration.skipUnnamedContacts = YES;
-        configuration.customSelectButtonHandler = ^(NSArray * contacts) {
-            NSLog(@"%@", contacts);
-        };
+
         configuration.contactEnabledValidation = ^(id contact) {
             APContact * _c = contact;
             if ([_c phonesWithLabels].count > 0) {
@@ -58,11 +58,42 @@
         configuration.tintColor = [UIColor orangeColor];
         configuration.mode = KBContactsSelectionModeEmail;
         configuration.title = @"Present";
+        configuration.selectButtonTitle = @"Compose";
+    }];
+    
+    
+    [vc setDelegate:self];
+    [self presentViewController:vc animated:YES completion:nil];
+    self.presentedCSVC = vc;
+    
+    __block UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 24)];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.text = @"Select people you want to email";
+    
+    vc.additionalInfoView = label;
+}
+
+
+- (IBAction)combined:(UIButton *)sender {
+    
+    __block KBContactsSelectionViewController *vc = [KBContactsSelectionViewController contactsSelectionViewControllerWithConfiguration:^(KBContactsSelectionConfiguration *configuration) {
+        configuration.tintColor = [UIColor orangeColor];
+        configuration.mode = KBContactsSelectionModeEmail;
+        configuration.title = @"Present";
+        configuration.selectButtonTitle = @"Custom";
         configuration.customContactCellNib = @"KBAlternativeContactCell";
-        configuration.selectButtonTitle = @"Invite";
+
         configuration.customSelectButtonHandler = ^(NSArray * contacts) {
-            NSLog(@"%@", contacts);
+            NSLog(@"This is a custom block for %@", contacts);
         };
+        
+        configuration.storeCache = ^(NSArray * apContacts) {
+            self.fakeCache = apContacts;
+        };
+        configuration.restoreCache = ^NSArray *(void) {
+            return self.fakeCache;
+        };
+        
     }];
     
     
@@ -78,7 +109,7 @@
 }
 
 #pragma mark - KBContactsSelectionViewControllerDelegate
-- (void) didSelectContact:(APContact *)contact {
+- (void) contactsSelection:(KBContactsSelectionViewController*)selection didSelectContact:(APContact *)contact {
     
     __block UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 36)];
     label.textAlignment = NSTextAlignmentCenter;
@@ -89,7 +120,7 @@
     NSLog(@"%@", self.presentedCSVC.selectedContacts);
 }
 
-- (void) didRemoveContact:(APContact *)contact {
+- (void) contactsSelection:(KBContactsSelectionViewController*)selection didRemoveContact:(APContact *)contact {
     
     __block UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 36)];
     label.textAlignment = NSTextAlignmentCenter;
@@ -100,4 +131,20 @@
     NSLog(@"%@", self.presentedCSVC.selectedContacts);
 }
 
+- (void)contactsSelectionWillLoadContacts:(KBContactsSelectionViewController *)csvc
+{
+    [SVProgressHUD showWithStatus:@"Loading..."];
+}
+- (void)contactsSelectionDidLoadContacts:(KBContactsSelectionViewController *)csvc
+{
+    [SVProgressHUD dismiss];
+}
+- (void) contactsSelectionRestoredCachedContacts:(KBContactsSelectionViewController *)csvc
+{
+    NSLog(@"contactsSelectionRestoredCachedContacts:");
+}
+- (void) contactsSelectionUpdatedCachedContacts:(KBContactsSelectionViewController *)csvc
+{
+    NSLog(@"contactsSelectionUpdatedCachedContacts:");
+}
 @end

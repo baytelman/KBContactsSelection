@@ -16,7 +16,8 @@
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) KBContactsSelectionConfiguration *configuration;
 
-@property (nonatomic, strong) NSArray *unmodifiedContacts;
+@property (nonatomic, strong) NSArray *unfilteredContacts;
+@property (nonatomic, strong) NSString *lastSearch;
 @property (nonatomic, strong) NSMutableArray *selectedContactsRecordIds;
 @property (nonatomic, strong) NSMutableArray *selectedRows;
 @property (nonatomic, strong) NSArray *sectionIndexTitles;
@@ -41,14 +42,16 @@ static NSString *cellIdentifier = @"KBContactCell";
          forCellReuseIdentifier:cellIdentifier];
         
         [self initializeArrays];
-        [self loadContacts];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self loadContacts];
+        });
     }
     return self;
 }
 
 - (void)initializeArrays
 {
-    _unmodifiedContacts = [NSArray array];
+    _unfilteredContacts = [NSArray array];
     _contacts = [NSArray array];
     _selectedContactsRecordIds = [NSMutableArray array];
     _sectionIndexTitles = [NSArray array];
@@ -57,6 +60,23 @@ static NSString *cellIdentifier = @"KBContactCell";
 
 - (void)loadContacts
 {
+    NSArray * cached = nil;
+    if (self.configuration.restoreCache) {
+        cached = self.configuration.restoreCache();
+    }
+    if (cached) {
+        self.unfilteredContacts = self.contacts = cached;
+        [self runSearch:self.lastSearch];
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (cached) {
+            [self.delegate dataSourceRestoredCachedContacts:self];
+        } else {
+            [self.delegate dataSourceWillLoadContacts:self];
+        }
+    });
+    
     APAddressBook *ab = [[APAddressBook alloc] init];
     ab.fieldsMask = APContactFieldFirstName | APContactFieldLastName | APContactFieldPhonesWithLabels | APContactFieldEmails | APContactFieldRecordID;
     ab.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"firstName" ascending:YES]];
@@ -79,14 +99,27 @@ static NSString *cellIdentifier = @"KBContactCell";
         return NO;
     };
     
-    [ab loadContacts:^(NSArray *contacts, NSError *error) {
-        if (contacts) {
-            NSArray *filteredContacts = [self filteredDuplicatedContacts:contacts];
-            self.unmodifiedContacts = filteredContacts;
-            self.contacts = filteredContacts;
-        }
-        [self updateAfterModifyingContacts];
-    }];
+    [ab loadContactsOnQueue:dispatch_get_global_queue(0, 0)
+                 completion:^(NSArray *contacts, NSError *error) {
+         if (contacts) {
+             NSArray *filteredContacts = [self filteredDuplicatedContacts:contacts];
+             self.unfilteredContacts = filteredContacts;
+             self.contacts = filteredContacts;
+         }
+         [self runSearch:self.lastSearch];
+         
+         if (self.configuration.storeCache) {
+             self.configuration.storeCache(self.unfilteredContacts);
+         }
+                     
+         dispatch_async(dispatch_get_main_queue(), ^{
+             if (cached) {
+                 [self.delegate dataSourceUpdateCachedContacts:self];
+             } else {
+                 [self.delegate dataSourceDidLoadContacts:self];
+             }
+         });
+     }];
 }
 
 //This method filters duplicated contacts by full name and phone.
@@ -172,18 +205,25 @@ static NSString *cellIdentifier = @"KBContactCell";
 
 - (void)runSearch:(NSString*)text
 {
+    _lastSearch = text;
+    
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
     if (text.length == 0) {
-        _contacts = _unmodifiedContacts;
+            _contacts = _unfilteredContacts;
     } else {
         NSMutableArray *filteredContacts = [NSMutableArray array];
-        [_unmodifiedContacts enumerateObjectsUsingBlock:^(APContact *contact, NSUInteger idx, BOOL *stop) {
+            [_unfilteredContacts enumerateObjectsUsingBlock:^(APContact *contact, NSUInteger idx, BOOL *stop) {
             if ([[contact fullName] rangeOfString:text options:NSCaseInsensitiveSearch].location != NSNotFound) {
                 [filteredContacts addObject:contact];
             }
         }];
         _contacts = filteredContacts;
     }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
     [self updateAfterModifyingContacts];
+        });
+    });
 }
 
 - (void)selectAll
@@ -206,7 +246,7 @@ static NSString *cellIdentifier = @"KBContactCell";
 {
     NSMutableArray *result = [NSMutableArray array];
     
-    [_unmodifiedContacts enumerateObjectsUsingBlock:^(APContact *contact, NSUInteger idx, BOOL *stop) {
+    [_unfilteredContacts enumerateObjectsUsingBlock:^(APContact *contact, NSUInteger idx, BOOL *stop) {
         if ([_selectedContactsRecordIds containsObject:contact.recordID]) {
             [result addObject:contact];
         }

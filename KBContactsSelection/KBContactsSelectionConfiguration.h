@@ -14,6 +14,9 @@
 typedef void(^KBContactSelectionHandler)(NSArray * selectedContacts);
 typedef BOOL(^KBContactValidation)(APContact * contact);
 
+typedef void(^KBContactStoreCache)(NSArray * apContacts);
+typedef NSArray *(^KBContactRestoreCache)(void);
+
 typedef NS_ENUM(NSInteger, KBContactsSelectionMode) {
     KBContactsSelectionModeMessages     = 1 << 0,
     KBContactsSelectionModeEmail        = 1 << 1
@@ -35,6 +38,11 @@ typedef NS_ENUM(NSInteger, KBContactsSelectionMode) {
 /* Action */
 @property (strong) NSString * selectButtonTitle;
 @property (strong) KBContactSelectionHandler customSelectButtonHandler;
+
+/* Cache */
+@property (strong) KBContactStoreCache storeCache;
+@property (strong) KBContactRestoreCache restoreCache;
+
 
 + (KBContactsSelectionConfiguration*)defaultConfiguration;
 
