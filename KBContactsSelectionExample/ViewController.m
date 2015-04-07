@@ -23,13 +23,11 @@
         configuration.shouldShowNavigationBar = NO;
         configuration.tintColor = [UIColor colorWithRed:11.0/255 green:211.0/255 blue:24.0/255 alpha:1];
         configuration.title = @"Push";
-        configuration.selectButtonTitle = @"+";
+        configuration.selectButtonTitle = @"Message";
         
-        configuration.mode = KBContactsSelectionModeMessages | KBContactsSelectionModeEmail;
+        configuration.mode = KBContactsSelectionModeMessages;
         configuration.skipUnnamedContacts = YES;
-        configuration.customSelectButtonHandler = ^(NSArray * contacts) {
-            NSLog(@"%@", contacts);
-        };
+
         configuration.contactEnabledValidation = ^(id contact) {
             APContact * _c = contact;
             if ([_c phonesWithLabels].count > 0) {
@@ -58,10 +56,45 @@
         configuration.tintColor = [UIColor orangeColor];
         configuration.mode = KBContactsSelectionModeEmail;
         configuration.title = @"Present";
-        configuration.selectButtonTitle = @"Invite";
+        configuration.selectButtonTitle = @"Compose";
+    }];
+    
+    
+    [vc setDelegate:self];
+    [self presentViewController:vc animated:YES completion:nil];
+    self.presentedCSVC = vc;
+    
+    __block UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 24)];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.text = @"Select people you want to email";
+    
+    vc.additionalInfoView = label;
+}
+
+- (IBAction)combined:(UIButton *)sender {
+    
+    __block KBContactsSelectionViewController *vc = [KBContactsSelectionViewController contactsSelectionViewControllerWithConfiguration:^(KBContactsSelectionConfiguration *configuration) {
+        configuration.tintColor = [UIColor orangeColor];
+        configuration.mode = KBContactsSelectionModeEmail;
+        configuration.title = @"Present";
+        configuration.selectButtonTitle = @"Custom";
+
         configuration.customSelectButtonHandler = ^(NSArray * contacts) {
-            NSLog(@"%@", contacts);
+            NSLog(@"This is a custom block for %@", contacts);
         };
+        
+        configuration.storeCache = ^(NSArray * apContacts) {
+            [[NSUserDefaults standardUserDefaults] setObject:[NSKeyedArchiver archivedDataWithRootObject:apContacts]
+                                                      forKey:@"cache"];
+        };
+        configuration.restoreCache = ^NSArray *(void) {
+            NSData * data = [[NSUserDefaults standardUserDefaults] objectForKey:@"cache"];
+            if (data) {
+                return (NSArray*)[NSKeyedUnarchiver unarchiveObjectWithData:data];
+            }
+            return nil;
+        };
+        
     }];
     
     

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Ru6-Uj-vdD">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Ru6-Uj-vdD">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -17,8 +17,8 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="obi-Vg-fHN">
-                                <rect key="frame" x="283" y="132" width="35" height="30"/>
-                                <state key="normal" title="Push">
+                                <rect key="frame" x="246" y="132" width="109" height="30"/>
+                                <state key="normal" title="Push Messages">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -26,12 +26,21 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z7i-BH-5xg">
-                                <rect key="frame" x="274" y="182" width="53" height="30"/>
-                                <state key="normal" title="Present">
+                                <rect key="frame" x="249" y="182" width="102" height="30"/>
+                                <state key="normal" title="Present Emails">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
                                     <action selector="present:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1xi-KC-bi9"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2LF-Ht-uUa">
+                                <rect key="frame" x="190" y="229" width="220" height="30"/>
+                                <state key="normal" title="Present Combined Using Cache">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="combined:" destination="BYZ-38-t0r" eventType="touchUpInside" id="GDB-lr-kHp"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -39,7 +48,9 @@
                         <constraints>
                             <constraint firstItem="obi-Vg-fHN" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="68" id="Q3b-90-omn"/>
                             <constraint firstAttribute="centerX" secondItem="z7i-BH-5xg" secondAttribute="centerX" id="WaA-hQ-rwe"/>
+                            <constraint firstItem="2LF-Ht-uUa" firstAttribute="top" secondItem="z7i-BH-5xg" secondAttribute="bottom" constant="17" id="b0c-u4-Dqp"/>
                             <constraint firstItem="z7i-BH-5xg" firstAttribute="top" secondItem="obi-Vg-fHN" secondAttribute="bottom" constant="20" id="jop-0p-axs"/>
+                            <constraint firstItem="2LF-Ht-uUa" firstAttribute="centerX" secondItem="z7i-BH-5xg" secondAttribute="centerX" id="v9B-EN-yTp"/>
                             <constraint firstAttribute="centerX" secondItem="obi-Vg-fHN" secondAttribute="centerX" id="vSK-19-ekg"/>
                         </constraints>
                     </view>
