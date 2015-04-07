@@ -10,6 +10,7 @@
 #import "KBContactsSelectionViewController.h"
 #import <APAddressBook/APContact.h>
 #import <APAddressBook/APPhoneWithLabel.h>
+#import <SVProgressHUD.h>
 
 @interface ViewController () <KBContactsSelectionViewControllerDelegate>
 @property (weak) KBContactsSelectionViewController* presentedCSVC;
@@ -107,7 +108,7 @@
 }
 
 #pragma mark - KBContactsSelectionViewControllerDelegate
-- (void) didSelectContact:(APContact *)contact {
+- (void) contactsSelection:(KBContactsSelectionViewController*)selection didSelectContact:(APContact *)contact {
     
     __block UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 36)];
     label.textAlignment = NSTextAlignmentCenter;
@@ -118,7 +119,7 @@
     NSLog(@"%@", self.presentedCSVC.selectedContacts);
 }
 
-- (void) didRemoveContact:(APContact *)contact {
+- (void) contactsSelection:(KBContactsSelectionViewController*)selection didRemoveContact:(APContact *)contact {
     
     __block UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 36)];
     label.textAlignment = NSTextAlignmentCenter;
@@ -129,4 +130,12 @@
     NSLog(@"%@", self.presentedCSVC.selectedContacts);
 }
 
+- (void)contactsSelectionWillLoadContacts:(KBContactsSelectionViewController *)csvc
+{
+    [SVProgressHUD showWithStatus:@"Loading..."];
+}
+- (void)contactsSelectionDidLoadContacts:(KBContactsSelectionViewController *)csvc
+{
+    [SVProgressHUD dismiss];
+}
 @end
