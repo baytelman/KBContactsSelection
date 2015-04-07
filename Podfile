@@ -3,7 +3,7 @@
 
 target 'KBContactsSelectionExample' do
 
-pod 'APAddressBook', :git => 'https://github.com/baytelman/APAddressBook.git'
+pod 'APAddressBook'
 
 end
 

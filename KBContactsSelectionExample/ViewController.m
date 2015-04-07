@@ -13,6 +13,7 @@
 
 @interface ViewController () <KBContactsSelectionViewControllerDelegate>
 @property (weak) KBContactsSelectionViewController* presentedCSVC;
+@property (strong) NSArray * fakeCache;
 @end
 
 @implementation ViewController
@@ -71,6 +72,7 @@
     vc.additionalInfoView = label;
 }
 
+
 - (IBAction)combined:(UIButton *)sender {
     
     __block KBContactsSelectionViewController *vc = [KBContactsSelectionViewController contactsSelectionViewControllerWithConfiguration:^(KBContactsSelectionConfiguration *configuration) {
@@ -84,15 +86,10 @@
         };
         
         configuration.storeCache = ^(NSArray * apContacts) {
-            [[NSUserDefaults standardUserDefaults] setObject:[NSKeyedArchiver archivedDataWithRootObject:apContacts]
-                                                      forKey:@"cache"];
+            self.fakeCache = apContacts;
         };
         configuration.restoreCache = ^NSArray *(void) {
-            NSData * data = [[NSUserDefaults standardUserDefaults] objectForKey:@"cache"];
-            if (data) {
-                return (NSArray*)[NSKeyedUnarchiver unarchiveObjectWithData:data];
-            }
-            return nil;
+            return self.fakeCache;
         };
         
     }];
