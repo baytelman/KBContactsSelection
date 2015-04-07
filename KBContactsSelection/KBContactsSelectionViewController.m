@@ -250,5 +250,17 @@
         [_delegate contactsSelectionDidLoadContacts:self];
     }
 }
+- (void)dataSourceRestoredCachedContacts:(KBContactsTableViewDataSource*)datasource
+{
+    if ([_delegate respondsToSelector:@selector(contactsSelectionDidLoadContacts:)]) {
+        [_delegate contactsSelectionDidLoadContacts:self];
+    }
+}
+- (void)dataSourceUpdateCachedContacts:(KBContactsTableViewDataSource*)datasource
+{
+    if ([_delegate respondsToSelector:@selector(contactsSelectionDidLoadContacts:)]) {
+        [_delegate contactsSelectionDidLoadContacts:self];
+    }
+}
 
 @end

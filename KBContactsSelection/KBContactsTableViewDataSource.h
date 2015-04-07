@@ -17,8 +17,11 @@
 @protocol KBContactsTableViewDataSourceDelegate <NSObject>
 - (void)dataSource:(KBContactsTableViewDataSource*)datasource didSelectContact:(APContact *)contact;
 - (void)dataSource:(KBContactsTableViewDataSource*)datasource didRemoveContact:(APContact *)contact;
+
 - (void)dataSourceWillLoadContacts:(KBContactsTableViewDataSource*)datasource;
 - (void)dataSourceDidLoadContacts:(KBContactsTableViewDataSource*)datasource;
+- (void)dataSourceRestoredCachedContacts:(KBContactsTableViewDataSource*)datasource;
+- (void)dataSourceUpdateCachedContacts:(KBContactsTableViewDataSource*)datasource;
 @end
 
 

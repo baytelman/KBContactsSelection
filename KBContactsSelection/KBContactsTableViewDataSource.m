@@ -58,7 +58,6 @@ static NSString *cellIdentifier = @"KBContactCell";
 
 - (void)loadContacts
 {
-    [self.delegate dataSourceWillLoadContacts:self];
     NSArray * cached = nil;
     if (self.configuration.restoreCache) {
         cached = self.configuration.restoreCache();
@@ -67,6 +66,14 @@ static NSString *cellIdentifier = @"KBContactCell";
         self.unfilteredContacts = self.contacts = cached;
         [self runSearch:self.lastSearch];
     }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (cached) {
+            [self.delegate dataSourceRestoredCachedContacts:self];
+        } else {
+            [self.delegate dataSourceWillLoadContacts:self];
+        }
+    });
     
     APAddressBook *ab = [[APAddressBook alloc] init];
     ab.fieldsMask = APContactFieldFirstName | APContactFieldLastName | APContactFieldPhonesWithLabels | APContactFieldEmails | APContactFieldRecordID;
@@ -92,18 +99,25 @@ static NSString *cellIdentifier = @"KBContactCell";
     
     [ab loadContactsOnQueue:dispatch_get_global_queue(0, 0)
                  completion:^(NSArray *contacts, NSError *error) {
-        if (contacts) {
-            NSArray *filteredContacts = [self filteredDuplicatedContacts:contacts];
+         if (contacts) {
+             NSArray *filteredContacts = [self filteredDuplicatedContacts:contacts];
              self.unfilteredContacts = filteredContacts;
-            self.contacts = filteredContacts;
-        }
+             self.contacts = filteredContacts;
+         }
          [self runSearch:self.lastSearch];
          
          if (self.configuration.storeCache) {
              self.configuration.storeCache(self.unfilteredContacts);
          }
-        [self.delegate dataSourceDidLoadContacts:self];
-    }];
+                     
+         dispatch_async(dispatch_get_main_queue(), ^{
+             if (cached) {
+                 [self.delegate dataSourceUpdateCachedContacts:self];
+             } else {
+                 [self.delegate dataSourceDidLoadContacts:self];
+             }
+         });
+     }];
 }
 
 //This method filters duplicated contacts by full name and phone.

@@ -138,4 +138,12 @@
 {
     [SVProgressHUD dismiss];
 }
+- (void) contactsSelectionRestoredCachedContacts:(KBContactsSelectionViewController *)csvc
+{
+    NSLog(@"contactsSelectionRestoredCachedContacts:");
+}
+- (void) contactsSelectionUpdatedCachedContacts:(KBContactsSelectionViewController *)csvc
+{
+    NSLog(@"contactsSelectionUpdatedCachedContacts:");
+}
 @end
