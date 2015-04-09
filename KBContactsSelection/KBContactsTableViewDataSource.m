@@ -206,14 +206,36 @@ static NSString *cellIdentifier = @"KBContactCell";
 - (void)runSearch:(NSString*)text
 {
     _lastSearch = text;
+
+    NSMutableArray * keywords = [text componentsSeparatedByCharactersInSet:[[NSCharacterSet alphanumericCharacterSet] invertedSet]].mutableCopy;
+    while ([keywords containsObject:@""]) {
+        [keywords removeObject:@""];
+    }
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
     if (text.length == 0) {
             _contacts = _unfilteredContacts;
     } else {
         NSMutableArray *filteredContacts = [NSMutableArray array];
-            [_unfilteredContacts enumerateObjectsUsingBlock:^(APContact *contact, NSUInteger idx, BOOL *stop) {
-            if ([[contact fullName] rangeOfString:text options:NSCaseInsensitiveSearch].location != NSNotFound) {
+        [_unfilteredContacts enumerateObjectsUsingBlock:^(APContact *contact, NSUInteger idx, BOOL *stop) {
+            BOOL shouldAdd = YES;
+            
+            if (self.configuration.searchByKeywords) {
+                NSMutableArray * pendingKeywords = keywords.mutableCopy;
+                NSArray * components = [[contact fullName].lowercaseString componentsSeparatedByCharactersInSet:[[NSCharacterSet alphanumericCharacterSet] invertedSet]];
+                for (NSString * key in pendingKeywords.copy) {
+                    for (NSString * component in components) {
+                        if ([component hasPrefix:key]) {
+                            [pendingKeywords removeObject:key];
+                            break;
+                        }
+                    }
+                }
+                shouldAdd = pendingKeywords.count == 0;
+            } else {
+                shouldAdd = [[contact fullName] rangeOfString:text options:NSCaseInsensitiveSearch].location != NSNotFound;
+            }
+            if (shouldAdd) {
                 [filteredContacts addObject:contact];
             }
         }];

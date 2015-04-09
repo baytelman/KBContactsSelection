@@ -94,6 +94,8 @@
             return self.fakeCache;
         };
         
+        configuration.searchByKeywords = YES;
+        
     }];
     
     
